@@ -217,14 +217,14 @@ def create_video(
 
 
 def save_video(clip, output_path: str, fps: int = FPS) -> str:
-    """Thin wrapper around write_videofile ensuring safe parameters."""
+    """Thin wrapper around write_videofile ensuring safe parameters and lightweight CPU usage."""
     clip.write_videofile(
         output_path,
         codec=VIDEO_CODEC,
         audio_codec=AUDIO_CODEC,
         fps=fps,
-        preset="medium",
-        threads=2,
-        logger=None,  # Clean non-spammy stdout
+        preset="ultrafast",  # Drastically reduces CPU rendering time on cloud containers
+        threads=1,           # Prevents spiking multiple shared vCPUs
+        logger=None,         # Clean non-spammy stdout
     )
     return output_path
